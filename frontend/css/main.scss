@@ -1,0 +1,188 @@
+// *******************************
+// ========== PARTIALS ===========
+// *******************************
+
+@import "grid";
+@import "animations";
+@import "https://fonts.googleapis.com/css?family=Lato";
+
+// *******************************
+// ========== VARIABLES ==========
+// *******************************
+
+$black: rgb(17, 21, 23);
+$grey: lighten(#000, 60);
+$brand: #2ab27b;
+
+$text: "Lato", "Proxima Nova", "Helvetica Neue", Verdana, Arial, sans-serif;
+
+// *******************************
+// ========== GLOBAL =============
+// *******************************
+
+body {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  background: #f4f4f4;
+  font-family: $text;
+  font-size: 18px;
+  line-height: 1.3;
+}
+
+.centered {
+  float: none;
+  margin: 0 auto;
+}
+
+.fade-in {
+  -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 2s; /* Firefox < 16 */
+        -ms-animation: fadein 2s; /* Internet Explorer */
+         -o-animation: fadein 2s; /* Opera < 12.1 */
+            animation: fadein 2s;
+}
+
+.shadow {
+  box-shadow: 0px 0px 109px 0px rgba(0, 0, 0, 0.13);
+}
+
+.btn {
+  border-radius: 7px;
+  background-color: $brand;
+  border: 0;
+  color: #FFF;
+  padding: 10px 25px 10px 25px;
+  font-weight: 700;
+  box-shadow: 0px 3px 0px 0px rgba(33, 146, 100, 1);
+
+  &:active {
+    box-shadow: 0px 0px 0px 0px rgba(33, 146, 100, 1);
+  }
+}
+
+// *******************************
+// ========== TYPOGRAPHY =========
+// *******************************
+
+h1 {
+  font-size: 60px;
+  font-weight: bolder;
+  color: rgb(255, 255, 255);
+  margin-bottom: 0;
+  text-align: center;
+}
+h2 {
+  font-size: 24px;
+  font-weight: 300;
+  margin-top: 0;
+  color: rgb(255, 255, 255);
+  text-align: center;
+}
+h3 {
+  font-size: 16px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-family: "Lato";
+  margin-top: 3em;
+  font-weight: 700;
+  color: $black;
+}
+p {
+  font-family: "Lato";
+  color: $black;
+  line-height: 1.667;
+  text-align: justify;
+}
+label {
+  display: block;
+}
+
+select {
+  display: block;
+  // TODO: Check select CSS styling
+}
+
+a {
+  color: $brand;
+  text-decoration: underline;
+
+  &:hover {
+    color: $brand;
+    text-decoration: none;
+  }
+}
+
+// *******************************
+// ========== SECTIONS ===========
+// *******************************
+
+header {
+  padding-top: 4em;
+  padding-bottom: 8em;
+  background: $brand;
+  position: relative;
+  z-index: 0;
+}
+main {
+  background: #FFF;
+  position: relative;
+  margin-top: -4em;
+  font-size: 16px;
+  z-index: 1;
+  padding: 2em 6em 2.2em 6em;
+  form {}
+}
+
+section {
+  margin-top: 2em;
+}
+
+section.green {
+  background: $brand;
+  margin-top: 5em;
+  padding-top: 3em;
+  padding-bottom: 4em;
+
+  .box {
+    background: #FFF;
+    padding-top: 4em;
+    padding-bottom: 4em;
+    text-align: center;
+
+    a {
+      text-decoration: none;
+
+      &:hover {
+      }
+    }
+  }
+}
+
+footer {
+  margin-top: 2em;
+  margin-bottom: 2em;
+  font-size: 14px;
+
+  ul {
+    list-style: none;
+
+    li {
+      display: inline-block;
+      margin-right: 25px;
+
+      a {
+        text-decoration: none;
+        text-transform: uppercase;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  p {
+    text-align: right;
+    color: $grey;
+  }
+}
