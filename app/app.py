@@ -1,14 +1,21 @@
-from flask import Flask, render_template
+import os
+import requests
+from flask import Flask, render_template, request, redirect, session
 from flask_assets import Environment, Bundle
+from slacker import Slacker
 
 
 app = Flask(__name__)
+app.secret_key = 'test_secret_key_and_sessions'
 app.jinja_env.add_extension('pypugjs.ext.jinja.PyPugJSExtension')
 
 assets = Environment(app)
 assets.url = app.static_url_path
 scss = Bundle('css/main.scss', filters='pyscss', output='main.css')
 assets.register('scss_all', scss)
+
+client_id = os.environ['CLIENT_ID']
+client_secret = os.environ['CLIENT_SECRET']
 
 
 def findby_num_members(num):
@@ -39,7 +46,30 @@ def findby_latest(date):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.pug')
+    token = session.get('access_token', None)
+    channels = []
+    if token is not None:
+        slack = Slacker(token)
+        channels_response = slack.channels.list(1)
+        channels = channels_response.body['channels']
+
+    return render_template('index.pug', channels=channels)
+
+
+@app.route('/oauth')
+def oauth():
+    if 'error' in request.args:
+        return redirect('/')
+
+    code = request.args.get('code')
+
+    token_url = "https://slack.com/api/oauth.access"
+    token_url_data = {'client_id': client_id, 'client_secret': client_secret,
+                      'code': code}
+    resp = requests.get(token_url, params=token_url_data)
+    jsoned = resp.json()
+    session['access_token'] = jsoned['access_token']
+    return redirect('/')
 
 
 if __name__ == '__main__':

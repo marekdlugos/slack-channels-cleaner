@@ -2,30 +2,6 @@ doctype
 html(lang="en")
   head
 
-    meta(charset="UTF-8")
-    meta(http-equiv="X-UA-Compatible", content="IE=edge")
-    meta(name="viewport", content="width=device-width, initial-scale=1")
-
-    title Slack Channels Cleaner
-    meta(name="description" content="Archive unused & old Slack channels. Make your Slack clean again!")
-    meta(name="keywords", content="slack, channels, cleaner, archive, clean")
-
-    meta(name="author", content="Marek Dlugos, Adrian Matejov")
-    meta(name="copyright", content="© 2017, Marek Dlugos, Adrian Matejov. All rights reserved.")
-    meta(name="robots", content="index, follow, noodp")
-    meta(name="googlebot" content="index,follow")
-
-    link(href="/images/favicon.png" rel="icon" type="image/png")
-    link(rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}")
-
-    meta(property="og:type" content="website")
-    meta(property="og:url" content="http://www.mareks.space/")
-    meta(property="og:title" content="Marek Dlugos — An Entrepreneurial Mind")
-    meta(property="og:image" content="http://www.mareks.space/images/og-image.jpg")
-    meta(property="og:description" content="Focusing on digital products. Personal website containing all of the information and previous work.")
-    meta(property="og:site_name" content="Marek Dlugos — Personal website")
-    meta(property="og:locale" content="en_US")
-
     meta(name="twitter:card" content="summary")
     meta(name="twitter:site" content="@marekdlugos")
     meta(name="twitter:creator" content="@marekdlugos")
@@ -42,29 +18,32 @@ html(lang="en")
       .row
         .col-lg-6.col-md-7.centered
           main.shadow
-            form(action="#" method="post")
+            if 'access_token' in session
+              p Welcome
+              form(action="#" method="post")
+                label Number of members
+                select
+                  option 0 members
+                  option Less than 1 member
+                  option Less than 2 members
+                  option Less than 3 members
+                  option Less than 5 members
+                label Last message sent
+                select
+                  option 1 month ago
+                  option 2 months ago
+                  option 3 months ago
+                  option 6 months ago
+                  option 1 year ago
+                  option 2 years ago
+                  option 3 years ago
+                p #[span 23 channels] will be archived. #[a(href="") Show them]
+                button.btn Archive channels
+            else
               p Sign in with your Slack team
-              a(href="#")
-                img(src="#" alt="alt")
-              label Number of members
-              select
-                option 0 members
-                option Less than 1 member
-                option Less than 2 members
-                option Less than 3 members
-                option Less than 5 members
-              label Last message sent
-              select
-                option 1 month ago
-                option 2 months ago
-                option 3 months ago
-                option 6 months ago
-                option 1 year ago
-                option 2 years ago
-                option 3 years ago
-              p #[span 23 channels] will be archived. #[a(href="") Show them]
-              button.btn Archive channels
-    section
+              a(href="https://slack.com/oauth/authorize?scope=channels:write,channels:read&client_id=185050966082.216449501621")
+                img(src="https://api.slack.com/img/sign_in_with_slack.png" alt="alt")
+                section
       .container
         .row
           .col-lg-6.col-md-7.centered
