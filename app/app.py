@@ -6,7 +6,7 @@ from slacker import Slacker
 
 
 app = Flask(__name__)
-app.secret_key = 'test_secret_key_and_sessions'
+app.secret_key = os.environ['SECRET_KEY']
 app.jinja_env.add_extension('pypugjs.ext.jinja.PyPugJSExtension')
 
 assets = Environment(app)
