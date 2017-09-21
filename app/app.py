@@ -11,7 +11,7 @@ app.jinja_env.add_extension('pypugjs.ext.jinja.PyPugJSExtension')
 
 assets = Environment(app)
 assets.url = app.static_url_path
-scss = Bundle('css/main.scss', filters='pyscss', output='main.css')
+scss = Bundle('assets/main.scss', filters='pyscss', output='css/main.css')
 assets.register('scss_all', scss)
 
 client_id = os.environ['CLIENT_ID']

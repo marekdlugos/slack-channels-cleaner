@@ -1,6 +1,30 @@
 doctype
 html(lang="en")
   head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    title Slack Channels Cleaner
+    meta(name="description" content="Archive unused & old Slack channels. Make your Slack clean again!")
+    meta(name="keywords", content="slack, channels, cleaner, archive, clean")
+    meta(name="author", content="Marek Dlugos, Adrian Matejov")
+    meta(name="copyright", content="© 2017, Marek Dlugos, Adrian Matejov. All rights reserved.")
+    meta(name="robots", content="index, follow, noodp")
+    meta(name="googlebot", content="index,follow")
+
+    link(href="/images/favicon.png", rel="icon", type="image/png")
+
+    {% assets "scss_all" %}
+    link(rel="stylesheet", href="{{ ASSET_URL }}")
+    {% endassets %}
+
+    meta(property="og:type", content="website")
+    meta(property="og:url", content="http://www.mareks.space/")
+    meta(property="og:title", content="Marek Dlugos — An Entrepreneurial Mind")
+    meta(property="og:image", content="http://www.mareks.space/images/og-image.jpg")
+    meta(property="og:description", content="Focusing on digital products. Personal website containing all of the information and previous work.")
+    meta(property="og:site_name", content="Marek Dlugos — Personal website")
+    meta(property="og:locale", content="en_US")
 
     meta(name="twitter:card" content="summary")
     meta(name="twitter:site" content="@marekdlugos")
@@ -37,7 +61,10 @@ html(lang="en")
                   option 1 year ago
                   option 2 years ago
                   option 3 years ago
-                p #[span 23 channels] will be archived. #[a(href="") Show them]
+                p #[span {{ channels|length }} channels] will be archived. #[a(href="") Show them]
+                ul
+                  each channel in channels
+                    li= channel.name
                 button.btn Archive channels
             else
               p Sign in with your Slack team
@@ -76,4 +103,4 @@ html(lang="en")
                 li
                   a(href="#") Contact
             .col-md-6
-              p &copy; 2016 Marek Dlugos. All rights reserved.
+              p &copy; 2017 Marek Dlugos, Adrian Matejov. All rights reserved.

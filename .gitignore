@@ -1,5 +1,7 @@
 venv/
 *.swp
+.webassets-cache/
+css/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
