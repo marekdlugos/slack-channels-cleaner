@@ -12,6 +12,9 @@ html(lang="en")
     meta(name="robots", content="index, follow, noodp")
     meta(name="googlebot", content="index,follow")
 
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
+    script(src="{{ url_for('static', filename='js/cleaner.js') }}")
+
     link(href="/images/favicon.png", rel="icon", type="image/png")
 
     {% assets "scss_all" %}
@@ -26,13 +29,25 @@ html(lang="en")
     meta(property="og:site_name", content="Marek Dlugos — Personal website")
     meta(property="og:locale", content="en_US")
 
-    meta(name="twitter:card" content="summary")
-    meta(name="twitter:site" content="@marekdlugos")
-    meta(name="twitter:creator" content="@marekdlugos")
-    meta(name="twitter:url" content="http://www.mareks.space/")
-    meta(name="twitter:title" content="Marek Dlugos — An Entrepreneurial Mind")
-    meta(name="twitter:description" content="Focusing on digital products. Personal website containing all of the information and previous work.")
-    meta(name="twitter:image" content="http://www.mareks.space/images/og-image.jpg")
+    meta(name="twitter:card", content="summary")
+    meta(name="twitter:site", content="@marekdlugos")
+    meta(name="twitter:creator", content="@marekdlugos")
+    meta(name="twitter:url", content="http://www.mareks.space/")
+    meta(name="twitter:title", content="Marek Dlugos — An Entrepreneurial Mind")
+    meta(name="twitter:description", content="Focusing on digital products. Personal website containing all of the information and previous work.")
+    meta(name="twitter:image", content="http://www.mareks.space/images/og-image.jpg")
+
+    script(type="text/javascript").
+      $(document).ready(function () {
+          var channels = [];
+          var filtered = [];
+          {% for channel in channels %}
+          channels.push(new Channel('{{ channel.name }}',
+                                    '{{ channel.id }}',
+                                    '{{ channel.last_event }}',
+                                    '{{ channel.num_members }}'));
+          {% endfor %}
+      });
 
   body
     header

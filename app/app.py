@@ -50,9 +50,17 @@ def index():
     channels = []
     if token is not None:
         slack = Slacker(token)
-        channels_response = slack.channels.list(1)
+        channels_response = slack.channels.list(exclude_archived=True)
         channels = channels_response.body['channels']
+        for i, channel in enumerate(channels):
+            channel_details_resp = slack.channels.info(channel['id'])
+            channel_details = channel_details_resp.body['channel']
+            if 'latest' in channel_details:
+                channels[i]['last_event'] = channel_details['latest']['ts']
+            else:
+                channels[i]['last_event'] = '-1'
 
+        print(channels)
     return render_template('index.pug', channels=channels)
 
 
@@ -63,7 +71,7 @@ def oauth():
 
     code = request.args.get('code')
 
-    token_url = "https://slack.com/api/oauth.access"
+    token_url = 'https://slack.com/api/oauth.access'
     token_url_data = {'client_id': client_id, 'client_secret': client_secret,
                       'code': code}
     resp = requests.get(token_url, params=token_url_data)
