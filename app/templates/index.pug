@@ -41,12 +41,31 @@ html(lang="en")
       $(document).ready(function () {
           var channels = [];
           var filtered = [];
+          var members = 1; /* less than x members */
+          var last_event = 1; /* 1 month ago */
+
           {% for channel in channels %}
           channels.push(new Channel('{{ channel.name }}',
                                     '{{ channel.id }}',
                                     '{{ channel.last_event }}',
                                     '{{ channel.num_members }}'));
           {% endfor %}
+            console.log(channels);
+          $('select#members_select, select#time_select').on('change', function() {
+              var raw = $(this).val();
+              var last = raw.slice(-1);
+              var val = parseInt(raw.slice(0, -1));
+
+              if (last == "m") {
+                  members = val;
+              } else if (last = "x") {
+                  last_event = val;
+              }
+
+              /* function from cleaner.js file */
+              filtered = filter(channels, members, last_event);
+              update_filtered(filtered);
+          });
       });
 
   body
@@ -61,26 +80,28 @@ html(lang="en")
               p Welcome
               form(action="#" method="post")
                 label Number of members
-                select
-                  option 0 members
-                  option Less than 1 member
-                  option Less than 2 members
-                  option Less than 3 members
-                  option Less than 5 members
+                select(name="members_select", id="members_select")
+                  option(value="1m", selected="selected") 0 members
+                  option(value="2m") Less than 2 members
+                  option(value="3m") Less than 3 members
+                  option(value="5m") Less than 5 members
                 label Last message sent
-                select
-                  option 1 month ago
-                  option 2 months ago
-                  option 3 months ago
-                  option 6 months ago
-                  option 1 year ago
-                  option 2 years ago
-                  option 3 years ago
+                select(name="time_select", id="time_select")
+                  option(value="1x", selected="selected") 1 month ago
+                  option(value="2x") 2 months ago
+                  option(value="3x") 3 months ago
+                  option(value="6x") 6 months ago
+                  option(value="12x") 1 year ago
+                  option(value="24x") 2 years ago
+                  option(value="36x") 3 years ago
                 p #[span {{ channels|length }} channels] will be archived. #[a(href="") Show them]
                 ul
+                  Vypisane vsetky channely
                   each channel in channels
                     li= channel.name
-                button.btn Archive channels
+              form(action=".", method="post", name="archive_channels")
+                div(id="filtered_channels")
+                input(type="submit", name="archive", value="Archive channels", class="btn")
             else
               p Sign in with your Slack team
               a(href="https://slack.com/oauth/authorize?scope=channels:write,channels:read&client_id=185050966082.216449501621")
