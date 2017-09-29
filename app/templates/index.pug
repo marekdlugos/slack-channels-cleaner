@@ -50,7 +50,6 @@ html(lang="en")
                                     '{{ channel.last_event }}',
                                     '{{ channel.num_members }}'));
           {% endfor %}
-            console.log(channels);
           $('select#members_select, select#time_select').on('change', function() {
               var raw = $(this).val();
               var last = raw.slice(-1);
@@ -66,6 +65,10 @@ html(lang="en")
               filtered = filter(channels, members, last_event);
               update_filtered(filtered);
           });
+
+          /* initial call */
+          filtered = filter(channels, members, last_event);
+          update_filtered(filtered);
       });
 
   body
@@ -94,13 +97,10 @@ html(lang="en")
                   option(value="12x") 1 year ago
                   option(value="24x") 2 years ago
                   option(value="36x") 3 years ago
-                p #[span {{ channels|length }} channels] will be archived. #[a(href="") Show them]
-                ul
-                  Vypisane vsetky channely
-                  each channel in channels
-                    li= channel.name
+                p #[span(id="number_of_channels")] channels will be archived. #[a(href="#", onclick="$('#show_filtered').slideToggle();return false;") Show them]
+                div(id="show_filtered", style="display:none;")
               form(action=".", method="post", name="archive_channels")
-                div(id="filtered_channels")
+                input(type="hidden", name="filtchannels", value="{'tofilter': []}", id="hiddeninp")
                 input(type="submit", name="archive", value="Archive channels", class="btn")
             else
               p Sign in with your Slack team

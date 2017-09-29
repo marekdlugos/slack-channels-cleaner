@@ -1,5 +1,6 @@
 import os
 import requests
+import json
 from flask import Flask, render_template, request, redirect, session
 from flask_assets import Environment, Bundle
 from slacker import Slacker
@@ -18,38 +19,18 @@ client_id = os.environ['CLIENT_ID']
 client_secret = os.environ['CLIENT_SECRET']
 
 
-def findby_num_members(num):
-    channels_response = slack.channels.list(1)
-    channels = channels_response.body['channels']
-    channels_to_archive = []
-    for channel in channels:
-        if channel['num_members'] <= num:
-            channels_to_archive.append(channel)
-    print channels_to_archive
-
-
-def findby_latest(date):
-    channels_response = slack.channels.list(1)
-    channels = channels_response.body['channels']
-    channels_to_archive = []
-    date = date_to_ts(date)
-    print date
-    for channel in channels:
-        channel_details_response = slack.channels.info(channel['id'])
-        channel_details = channel_details_response.body['channel']
-        latest_message_ts = channel_details['latest']['ts']
-        print latest_message_ts
-        if latest_message_ts < date:
-            channels_to_archive.append(channel)
-    print channels_to_archive
-
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
     token = session.get('access_token', None)
     channels = []
     if token is not None:
         slack = Slacker(token)
+
+        if request.method == 'POST':
+            tofilter = json.loads(request.form['filtchannels'])
+            for ch in tofilter['tofilter']:
+                slack.channels.archive(ch['id'])
+
         channels_response = slack.channels.list(exclude_archived=True)
         channels = channels_response.body['channels']
         for i, channel in enumerate(channels):
@@ -60,7 +41,6 @@ def index():
             else:
                 channels[i]['last_event'] = '-1'
 
-        print(channels)
     return render_template('index.pug', channels=channels)
 
 
