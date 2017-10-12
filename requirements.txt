@@ -1,0 +1,5 @@
+Flask
+pypugjs
+Flask-Assets
+slacker
+requests

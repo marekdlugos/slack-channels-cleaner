@@ -1,0 +1,142 @@
+doctype
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    title Slack Channels Cleaner
+    meta(name="description" content="Archive unused & old Slack channels. Make your Slack clean again!")
+    meta(name="keywords", content="slack, channels, cleaner, archive, clean")
+    meta(name="author", content="Marek Dlugos, Adrian Matejov")
+    meta(name="copyright", content="© 2017, Marek Dlugos, Adrian Matejov. All rights reserved.")
+    meta(name="robots", content="index, follow, noodp")
+    meta(name="googlebot", content="index,follow")
+
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
+    script(src="{{ url_for('static', filename='js/cleaner.js') }}")
+
+    link(href="/images/favicon.png", rel="icon", type="image/png")
+
+    {% assets "scss_all" %}
+    link(rel="stylesheet", href="{{ ASSET_URL }}")
+    {% endassets %}
+
+    meta(property="og:type", content="website")
+    meta(property="og:url", content="http://www.mareks.space/")
+    meta(property="og:title", content="Marek Dlugos — An Entrepreneurial Mind")
+    meta(property="og:image", content="http://www.mareks.space/images/og-image.jpg")
+    meta(property="og:description", content="Focusing on digital products. Personal website containing all of the information and previous work.")
+    meta(property="og:site_name", content="Marek Dlugos — Personal website")
+    meta(property="og:locale", content="en_US")
+
+    meta(name="twitter:card", content="summary")
+    meta(name="twitter:site", content="@marekdlugos")
+    meta(name="twitter:creator", content="@marekdlugos")
+    meta(name="twitter:url", content="http://www.mareks.space/")
+    meta(name="twitter:title", content="Marek Dlugos — An Entrepreneurial Mind")
+    meta(name="twitter:description", content="Focusing on digital products. Personal website containing all of the information and previous work.")
+    meta(name="twitter:image", content="http://www.mareks.space/images/og-image.jpg")
+
+    script(type="text/javascript").
+      $(document).ready(function () {
+          var channels = [];
+          var filtered = [];
+          var members = 1; /* less than x members */
+          var last_event = 1; /* 1 month ago */
+
+          {% for channel in channels %}
+          channels.push(new Channel('{{ channel.name }}',
+                                    '{{ channel.id }}',
+                                    '{{ channel.last_event }}',
+                                    '{{ channel.num_members }}'));
+          {% endfor %}
+          $('select#members_select, select#time_select').on('change', function() {
+              var raw = $(this).val();
+              var last = raw.slice(-1);
+              var val = parseInt(raw.slice(0, -1));
+
+              if (last == "m") {
+                  members = val;
+              } else if (last = "x") {
+                  last_event = val;
+              }
+
+              /* function from cleaner.js file */
+              filtered = filter(channels, members, last_event);
+              update_filtered(filtered);
+          });
+
+          /* initial call */
+          filtered = filter(channels, members, last_event);
+          update_filtered(filtered);
+      });
+
+  body
+    header
+      h1 Slack Channels Cleaner
+      h2 Archive unused & old Slack channels. Make your Slack clean again!
+    .container
+      .row
+        .col-lg-6.col-md-7.centered
+          main.shadow
+            if 'access_token' in session
+              p Welcome
+              form(action="#" method="post")
+                label Number of members
+                select(name="members_select", id="members_select")
+                  option(value="1m", selected="selected") 0 members
+                  option(value="2m") Less than 2 members
+                  option(value="3m") Less than 3 members
+                  option(value="5m") Less than 5 members
+                label Last message sent
+                select(name="time_select", id="time_select")
+                  option(value="1x", selected="selected") 1 month ago
+                  option(value="2x") 2 months ago
+                  option(value="3x") 3 months ago
+                  option(value="6x") 6 months ago
+                  option(value="12x") 1 year ago
+                  option(value="24x") 2 years ago
+                  option(value="36x") 3 years ago
+                p #[span(id="number_of_channels")] channels will be archived. #[a(href="#", onclick="$('#show_filtered').slideToggle();return false;") Show them]
+                div(id="show_filtered", style="display:none;")
+              form(action=".", method="post", name="archive_channels")
+                input(type="hidden", name="filtchannels", value="{'tofilter': []}", id="hiddeninp")
+                input(type="submit", name="archive", value="Archive channels", class="btn")
+            else
+              p Sign in with your Slack team
+              a(href="https://slack.com/oauth/authorize?scope=channels:write,channels:read&client_id=185050966082.216449501621")
+                img(src="https://api.slack.com/img/sign_in_with_slack.png" alt="alt")
+                section
+      .container
+        .row
+          .col-lg-6.col-md-7.centered
+            h3 Problem
+            p While I worked as a design intern at #[a(href="#") Shopify] I came across with problem that we had more Slack channels than employees but a lot of them were without any members (or simply just 2) or the discussion was already dead/obsolete.
+            p It was hard to navigate through them and that I have accidentally joined some dead channel was more than common. This app will eliminate it and clean your Slack.
+            h3 About the author
+            p #[a(href="#") Marek Dlugos] is a Digital Product Designer with background in Software Engineering. Driven by improving things around.
+            p Facebook | Twitter | Dribbble | Github | LinkedIn
+    section.green
+      .container
+        .row
+          .col-md-12
+            h2 Help your friends to clean their Slack
+        .row
+          .col-lg-6.col-md-6.col-sm-8.centered
+            .row
+              .col-xs-4.col-xs-offset-1.box.shadow
+                a Share
+              .col-xs-4.col-xs-offset-2.box.shadow
+                a Tweet
+    footer
+      .container
+        .row
+          .col-md-9.centered
+            .col-md-6
+              ul.links
+                li
+                  a(href="#") Privacy
+                li
+                  a(href="#") Contact
+            .col-md-6
+              p &copy; 2017 Marek Dlugos, Adrian Matejov. All rights reserved.
