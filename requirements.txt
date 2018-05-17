@@ -1,5 +1,5 @@
 Flask==0.12.2
-pypugjs==4.2.2
+pypugjs==5.6.0
 Flask-Assets==0.12
 slacker==0.9.60
 requests==2.18.4
