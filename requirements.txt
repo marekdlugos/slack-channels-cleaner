@@ -4,3 +4,4 @@ Flask-Assets==0.12
 slacker==0.9.60
 requests==2.18.4
 gunicorn==19.8.1
+pyScss==1.3.5
