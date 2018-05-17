@@ -3,3 +3,4 @@ pypugjs
 Flask-Assets
 slacker
 requests
+gunicorn
